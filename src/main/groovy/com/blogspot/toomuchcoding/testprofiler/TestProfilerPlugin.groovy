@@ -12,13 +12,16 @@ import javax.inject.Inject
 class TestProfilerPlugin implements Plugin<Project> {
 
     public static final String PROFILE_TESTS_TASK_NAME = "profileTests"
+    public static final String PROFILE_TESTS_REPORT_TASK_NAME = "profileTestReports"
     public static final String TIMEOUT_ADDER_TESTS_TASK_NAME = "addTimeout"
 
     @PackageScope static final String DEFAULT_TEST_TIMEOUT_PROPERTY = 'default.test.timeout'
 
     private static final String DEFAULT_REPORTS_FOLDER = '/reports/test_profiling'
-    private static final String DEFAULT_SINGLE_REPORT_RELATIVE_PATH = "$DEFAULT_REPORTS_FOLDER/testsProfile.csv"
-    private static final String DEFAULT_MERGED_REPORTS_RELATIVE_PATH = "$DEFAULT_REPORTS_FOLDER/summary.csv"
+    private static final String DEFAULT_CSV_REPORT_RELATIVE_PATH = "$DEFAULT_REPORTS_FOLDER/testsProfile.csv"
+    private static final String DEFAULT_HTML_REPORT_RELATIVE_PATH = "$DEFAULT_REPORTS_FOLDER/testsProfile.html"
+    private static final String DEFAULT_CSV_MERGED_REPORTS_RELATIVE_PATH = "$DEFAULT_REPORTS_FOLDER/summary.csv"
+    private static final String DEFAULT_HTML_MERGED_REPORTS_RELATIVE_PATH = "$DEFAULT_REPORTS_FOLDER/summary.html"
 
     private TestTaskModifier testTaskModifier
     private final LoggerProxy loggerProxy
@@ -53,8 +56,10 @@ class TestProfilerPlugin implements Plugin<Project> {
     }
 
     private void setDefaults(Project project, TestProfilerPluginExtension testProfilerPluginExtension) {
-        testProfilerPluginExtension.relativeReportPath = new File(DEFAULT_SINGLE_REPORT_RELATIVE_PATH)
-        testProfilerPluginExtension.mergedSummaryPath = new File(project.rootProject.buildDir, DEFAULT_MERGED_REPORTS_RELATIVE_PATH)
+        testProfilerPluginExtension.relativeCsvReportPath = new File(DEFAULT_CSV_REPORT_RELATIVE_PATH)
+        testProfilerPluginExtension.relativeHtmlReportPath = new File(DEFAULT_HTML_REPORT_RELATIVE_PATH)
+        testProfilerPluginExtension.mergedCsvSummaryPath = new File(project.rootProject.buildDir, DEFAULT_CSV_MERGED_REPORTS_RELATIVE_PATH)
+        testProfilerPluginExtension.mergedHtmlSummaryPath = new File(project.rootProject.buildDir, DEFAULT_HTML_MERGED_REPORTS_RELATIVE_PATH)
     }
 
     private void modifyTestTasks(Project project, TestProfilerPluginExtension extension) {
@@ -67,7 +72,7 @@ class TestProfilerPlugin implements Plugin<Project> {
     }
 
     private File mergedTestProfilingSummaryDir(TestProfilerPluginExtension extension) {
-        File mergedTestProfilingSummaryDir = extension.mergedSummaryPath.parentFile
+        File mergedTestProfilingSummaryDir = extension.mergedCsvSummaryPath.parentFile
         mergedTestProfilingSummaryDir.mkdirs()
         return mergedTestProfilingSummaryDir
     }

@@ -41,12 +41,14 @@ class TestProfilerPluginExtension {
     /**
      * Path to the report for a module. Defaults to {@code project.buildDir/reports/test_profiling/testsProfile.csv}
      */
-    File relativeReportPath
+    File relativeCsvReportPath
+    File relativeHtmlReportPath
 
     /**
      * Path to the merged summary of reports. Defaults to {@code project.rootProject.buildDir/reports/test_profiling/summary.csv"
      */
-    File mergedSummaryPath
+    File mergedCsvSummaryPath
+    File mergedHtmlSummaryPath
 
     /**
      * Milliseconds of test execution above which we will store information about the test. Defaults to 0

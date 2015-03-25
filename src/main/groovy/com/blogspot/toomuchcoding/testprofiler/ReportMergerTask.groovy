@@ -23,7 +23,7 @@ class ReportMergerTask extends DefaultTask {
         log.debug("Will store merged test profiling summary in [${getMergedTestProfilingSummaryFile()}]")
         Project rootProject = project.rootProject
         String fileContent = rootProject.getAllprojects().collect {
-            File report = new File(it.buildDir, getTestProfilerPluginExtension().relativeReportPath.toString())
+            File report = new File(it.buildDir, getTestProfilerPluginExtension().relativeCsvReportPath.toString())
             log.debug("Report to collect [$report]")
             return report
         }.findAll {

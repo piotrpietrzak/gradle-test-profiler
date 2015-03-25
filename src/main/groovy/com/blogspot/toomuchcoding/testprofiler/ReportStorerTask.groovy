@@ -40,7 +40,7 @@ class ReportStorerTask {
     }
 
     private File createNewReportFile() {
-        File report = new File(project.buildDir, testProfilerPluginExtension.relativeReportPath.toString())
+        File report = new File(project.buildDir, testProfilerPluginExtension.relativeCsvReportPath.toString())
         log.debug("Creating a new file [$report]")
         report.delete()
         report.parentFile.mkdirs()
@@ -57,7 +57,7 @@ class ReportStorerTask {
     }
 
     private void appendTestExecutionResultToMergedTestSummary(String testExecutionResult) {
-        File mergedTestProfilingSummary = testProfilerPluginExtension.mergedSummaryPath
+        File mergedTestProfilingSummary = testProfilerPluginExtension.mergedCsvSummaryPath
         mergedTestProfilingSummary.parentFile.mkdirs()
         mergedTestProfilingSummary << testExecutionResult << '\n'
         log.debug("Stored [$testExecutionResult] in [$mergedTestProfilingSummary]")

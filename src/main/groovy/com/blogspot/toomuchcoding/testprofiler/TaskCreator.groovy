@@ -6,6 +6,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 
 import static com.blogspot.toomuchcoding.testprofiler.TestProfilerPlugin.PROFILE_TESTS_TASK_NAME
+import static com.blogspot.toomuchcoding.testprofiler.TestProfilerPlugin.PROFILE_TESTS_REPORT_TASK_NAME
 
 @PackageScope
 @Slf4j
@@ -23,7 +24,9 @@ class TaskCreator {
 
     private Task createTask(TestProfilerPluginExtension extension, Project project) {
         if (extension.enabled) {
-            return createReportMerger(project, extension)
+            def reportMergerTask = createReportMerger(project, extension)
+            createReportTask(project,extension)
+            return reportMergerTask
         } else {
             return createNoOpTask(project)
         }
@@ -37,13 +40,24 @@ class TaskCreator {
         log.info("Created a task [$PROFILE_TESTS_TASK_NAME] in root project")
         reportMerger.conventionMapping.with {
             testProfilerPluginExtension = { extension }
-            mergedTestProfilingSummaryFile = { extension.mergedSummaryPath }
+            mergedTestProfilingSummaryFile = { extension.mergedCsvSummaryPath }
         }
         return reportMerger
     }
 
+    private ReportMergerTask createReportTask(Project project, TestProfilerPluginExtension extension) {
+        if (reportTaskAlreadyExists(project)) {
+            return null
+        }
+
+    }
+
     private Set<Task> taskAlreadyExists(Project project) {
         return project.getTasksByName(PROFILE_TESTS_TASK_NAME, false)
+    }
+
+    private Set<Task> reportTaskAlreadyExists(Project project) {
+        return project.getTasksByName(PROFILE_TESTS_REPORT_TASK_NAME, false)
     }
 
     private NoOpTask createNoOpTask(Project project) {
